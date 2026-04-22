@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model SpotifyToken {
+  id           String   @id @default("master_account")
+  accessToken  String
+  refreshToken String
+  updatedAt    DateTime @updatedAt
+}
+
+model GeneratedPlaylist {
+  id          String    @id
+  playlistId  String    @unique
+  createdAt   DateTime  @default(now())
+  deletedAt   DateTime?
+}
+
+model User {
+  id                  String        @id @default(uuid())
+  googleId            String        @unique
+  email               String        @unique
+  name                String?
+  avatarUrl           String?
+  spotifyAccessToken  String?
+  chatSessions        ChatSession[]
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+}
+
+model ChatSession {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  title       String?
+  mode        String   @default("image")
+  promptText  String?
+  playlistUrl String?
+  tracks      Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
