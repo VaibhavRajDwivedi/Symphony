@@ -45,15 +45,34 @@ export default function Home() {
 
           {/* Idle Hero Screen */}
           {!activeChatId && !isGenerating && (
-            <div style={{ textAlign: "center" }}>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "4px 14px", borderRadius: "20px", border: "1px solid rgba(29,185,84,0.3)", background: "rgba(29,185,84,0.05)", marginBottom: "24px" }}>
-                <span style={{ fontSize: "12px", color: "var(--green)", fontFamily: "var(--font-body)", letterSpacing: "0.04em" }}>Powered by Gemini 2.5 Flash</span>
+            <div style={{ textAlign: "center", padding: "40px 0" }}>
+              <div style={{
+                display: "inline-flex", alignItems: "center", gap: "6px",
+                padding: "4px 14px", borderRadius: "20px",
+                border: "1px solid rgba(29,185,84,0.3)",
+                background: "rgba(29,185,84,0.05)", marginBottom: "32px",
+              }}>
+                <span style={{ fontSize: "11px", color: "#1db954", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                  LangGraph · Gemini · Groq · Spotify API
+                </span>
               </div>
-              <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(36px, 6vw, 64px)", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.04em", lineHeight: 1.05, marginBottom: "16px" }}>
-                Screenshot to <span style={{ color: "var(--green)" }}>Spotify</span><br />in seconds.
+              <h1 style={{
+                fontFamily: "var(--font-heading)",
+                fontSize: "clamp(42px, 7vw, 72px)",
+                fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 0.95,
+                color: "var(--text-primary)", marginBottom: "24px",
+              }}>
+                Any input. Perfect playlists.<br />
+                <span style={{ color: "#1db954" }}>Generated in seconds.</span>
               </h1>
-              <p style={{ fontSize: "16px", color: "var(--text-secondary)", maxWidth: "420px", margin: "0 auto", lineHeight: 1.6, fontFamily: "var(--font-body)" }}>
-                Upload any tracklist screenshot or describe your vibe. Symphony uses AI to instantly build a shareable Spotify playlist.
+              <p style={{
+                fontSize: "clamp(16px, 1.8vw, 18px)",
+                color: "var(--text-secondary)",
+                maxWidth: "500px", margin: "0 auto",
+                lineHeight: 1.6,
+                opacity: 0.8
+              }}>
+                Upload a screenshot, describe your vibe, or remix an existing Spotify playlist. A 6-stage multi-agent pipeline does the rest.
               </p>
             </div>
           )}
