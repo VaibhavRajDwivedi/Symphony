@@ -1,10 +1,10 @@
 import type { Request, Response } from "express";
-import { SSEStream } from "../services/sse.service";
-import { extractTracksFromImage } from "../services/gemini.service";
-import { generatePlaylist } from "../services/spotifyPlaylist.service";
-import { runRecommendPipeline } from "../services/recommend.service";
-import { prisma } from "../lib/prisma";
-import { env } from "../config/env";
+import { SSEStream } from "../services/sse.service.js";
+import { extractTracksFromImage } from "../services/gemini.service.js";
+import { generatePlaylist } from "../services/spotifyPlaylist.service.js";
+import { runRecommendPipeline } from "../services/recommend.service.js";
+import { prisma } from "../lib/prisma.js";
+import { env } from "../config/env.js";
 
 
 export async function streamGeneratePlaylist(

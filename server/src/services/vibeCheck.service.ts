@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { env } from "../config/env";
-import type { ResolvedTrack } from "../types";
+import { env } from "../config/env.js";
+import type { ResolvedTrack } from "../types/index.js";
 
 const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
 

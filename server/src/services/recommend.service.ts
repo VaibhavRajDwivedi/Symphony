@@ -1,13 +1,13 @@
 import axios from "axios";
-import { env } from "../config/env";
-import { expandWithLastFm } from "./lastfm.service";
-import { getAccessToken, getUserSpotifyToken } from "./spotifyAuth.service";
-import { extractPlaylistId, getPlaylistTracks } from "./spotifyPlaylist.service";
-import { getGeminiCompletion } from "./gemini.service";
-import { getGroqCompletion } from "./groq.service";
-import type { GeminiSong, ScoredCandidate } from "./lastfm.service";
-import type { ResolvedTrack, SpotifySearchResponse, SpotifyPlaylistResponse } from "../types";
-import { playlistAgent, remixAgent } from "./playlistGraph";
+import { env } from "../config/env.js";
+import { expandWithLastFm } from "./lastfm.service.js";
+import { getAccessToken, getUserSpotifyToken } from "./spotifyAuth.service.js";
+import { extractPlaylistId, getPlaylistTracks } from "./spotifyPlaylist.service.js";
+import { getGeminiCompletion } from "./gemini.service.js";
+import { getGroqCompletion } from "./groq.service.js";
+import type { GeminiSong, ScoredCandidate } from "./lastfm.service.js";
+import type { ResolvedTrack, SpotifySearchResponse, SpotifyPlaylistResponse } from "../types/index.js";
+import { playlistAgent, remixAgent } from "./playlistGraph.js";
 
 /**
  * Unified AI call router used by the rest of the pipeline.

@@ -1,17 +1,17 @@
 import "dotenv/config";
-import { env } from "./config/env";
+import { env } from "./config/env.js";
 
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import authRoutes from "./routes/auth.routes";
-import authGoogleRoutes from "./routes/auth.google.routes";
-import chatRoutes from "./routes/chat.routes";
-import playlistRoutes from "./routes/playlist.routes";
-import recommendRoutes from "./routes/recommend.routes";
-import { errorHandler } from "./middleware/errorHandler";
-import { startCleanupCron } from "./services/playlistCleanup.service";
-import streamRoutes from "./routes/stream.routes";
+import authRoutes from "./routes/auth.routes.js";
+import authGoogleRoutes from "./routes/auth.google.routes.js";
+import chatRoutes from "./routes/chat.routes.js";
+import playlistRoutes from "./routes/playlist.routes.js";
+import recommendRoutes from "./routes/recommend.routes.js";
+import { errorHandler } from "./middleware/errorHandler.js";
+import { startCleanupCron } from "./services/playlistCleanup.service.js";
+import streamRoutes from "./routes/stream.routes.js";
 
 const app = express();
 

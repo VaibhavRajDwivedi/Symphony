@@ -1,8 +1,9 @@
 {
   "name": "symphony",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "AI Orchestration Backend",
+  "main": "dist/server.js",
+  "type": "module",
   "scripts": {
     "build": "npx prisma generate && tsc",
     "start": "node dist/server.js",

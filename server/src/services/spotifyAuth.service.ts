@@ -1,7 +1,7 @@
 import axios from "axios";
-import { prisma } from "../lib/prisma";
-import { env } from "../config/env";
-import type { SpotifyTokenResponse } from "../types";
+import { prisma } from "../lib/prisma.js";
+import { env } from "../config/env.js";
+import type { SpotifyTokenResponse } from "../types/index.js";
 
 const SPOTIFY_ACCOUNTS_URL = "https://accounts.spotify.com";
 const MASTER_TOKEN_ID = "master_account";

@@ -1,8 +1,8 @@
 import { StateGraph, START, END, Annotation } from "@langchain/langgraph";
-import { env } from "../config/env";
-import { getGroqCompletion } from "./groq.service";
-import { getGeminiCompletion } from "./gemini.service";
-import type { GeminiSong } from "./lastfm.service";
+import { env } from "../config/env.js";
+import { getGroqCompletion } from "./groq.service.js";
+import { getGeminiCompletion } from "./gemini.service.js";
+import type { GeminiSong } from "./lastfm.service.js";
 
 // Helper function to call the AI directly (prevents circular dependency with recommend.service.ts)
 async function graphCallAI<T>(prompt: string, temperature: number = 0.7, systemPrompt?: string): Promise<T> {

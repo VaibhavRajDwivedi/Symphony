@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { runRecommendPipeline } from "../services/recommend.service";
+import { runRecommendPipeline } from "../services/recommend.service.js";
 
 // ─── Request body shape ───────────────────────────────────────────────────────
 

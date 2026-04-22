@@ -1,14 +1,14 @@
 import axios from "axios";
-import { prisma } from "../lib/prisma";
-import { env } from "../config/env";
-import { getAccessToken } from "./spotifyAuth.service";
+import { prisma } from "../lib/prisma.js";
+import { env } from "../config/env.js";
+import { getAccessToken } from "./spotifyAuth.service.js";
 import type {
   Track,
   ResolvedTrack,
   SpotifySearchResponse,
   SpotifyPlaylistResponse,
   GeneratePlaylistResponse,
-} from "../types";
+} from "../types/index.js";
 
 const SPOTIFY_API_URL = "https://api.spotify.com/v1";
 

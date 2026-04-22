@@ -2,8 +2,8 @@ import { Router } from "express";
 import {
   streamGeneratePlaylist,
   streamRecommendPlaylist,
-} from "../controllers/stream.controller";
-import { generatePlaylistLimiter } from "../middleware/rateLimiter";
+} from "../controllers/stream.controller.js";
+import { generatePlaylistLimiter } from "../middleware/rateLimiter.js";
 
 const router = Router();
 

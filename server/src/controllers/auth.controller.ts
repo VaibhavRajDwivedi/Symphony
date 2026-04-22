@@ -3,8 +3,8 @@ import {
   getSpotifyAuthUrl,
   exchangeCodeForTokens,
   isMasterAccountSetup,
-} from "../services/spotifyAuth.service";
-import { env } from "../config/env";
+} from "../services/spotifyAuth.service.js";
+import { env } from "../config/env.js";
 
 // ─── GET /api/auth/login ──────────────────────────────────────────────────────
 

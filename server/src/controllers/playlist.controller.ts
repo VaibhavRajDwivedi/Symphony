@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
-import { extractTracksFromImage } from "../services/gemini.service";
-import { generatePlaylist } from "../services/spotifyPlaylist.service";
-import type { GeneratePlaylistBody } from "../types";
+import { extractTracksFromImage } from "../services/gemini.service.js";
+import { generatePlaylist } from "../services/spotifyPlaylist.service.js";
+import type { GeneratePlaylistBody } from "../types/index.js";
 
 export async function generatePlaylistHandler(
   req: Request<{}, {}, GeneratePlaylistBody>,

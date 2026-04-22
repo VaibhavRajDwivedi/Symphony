@@ -1,7 +1,7 @@
 import cron from "node-cron";
 import axios from "axios";
-import { prisma } from "../lib/prisma";
-import { getAccessToken } from "./spotifyAuth.service";
+import { prisma } from "../lib/prisma.js";
+import { getAccessToken } from "./spotifyAuth.service.js";
 
 const SPOTIFY_API_URL = "https://api.spotify.com/v1";
 

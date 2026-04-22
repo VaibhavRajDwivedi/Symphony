@@ -1,6 +1,6 @@
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
-import { recommendHandler } from "../controllers/recommend.controller";
+import { recommendHandler } from "../controllers/recommend.controller.js";
 
 // ─── Rate Limiter ─────────────────────────────────────────────────────────────
 

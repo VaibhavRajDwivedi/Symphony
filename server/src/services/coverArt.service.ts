@@ -1,8 +1,8 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import axios from "axios";
-import { env } from "../config/env";
-import { getAccessToken } from "./spotifyAuth.service";
-import type { ResolvedTrack } from "../types";
+import { env } from "../config/env.js";
+import { getAccessToken } from "./spotifyAuth.service.js";
+import type { ResolvedTrack } from "../types/index.js";
 
 const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
 

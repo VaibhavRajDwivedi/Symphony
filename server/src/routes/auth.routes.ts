@@ -3,7 +3,7 @@ import {
   loginHandler,
   callbackHandler,
   statusHandler,
-} from "../controllers/auth.controller";
+} from "../controllers/auth.controller.js";
 
 const router = Router();
 
@@ -12,7 +12,7 @@ router.get("/callback", callbackHandler);
 router.get("/status", statusHandler);
 
 router.get("/whoami", async (req, res) => {
-  const { getAccessToken } = await import("../services/spotifyAuth.service");
+  const { getAccessToken } = await import("../services/spotifyAuth.service.js");
   const axios = (await import("axios")).default;
   const token = await getAccessToken();
   const { data } = await axios.get("https://api.spotify.com/v1/me", {
@@ -22,7 +22,7 @@ router.get("/whoami", async (req, res) => {
 });
 
 router.get("/test-playlist", async (req, res) => {
-  const { getAccessToken } = await import("../services/spotifyAuth.service");
+  const { getAccessToken } = await import("../services/spotifyAuth.service.js");
   const axios = (await import("axios")).default;
   const token = await getAccessToken();
   const { data } = await axios.post(
@@ -35,7 +35,7 @@ router.get("/test-playlist", async (req, res) => {
 
 
 router.get("/scopes", async (req, res) => {
-  const { getAccessToken } = await import("../services/spotifyAuth.service");
+  const { getAccessToken } = await import("../services/spotifyAuth.service.js");
   const axios = (await import("axios")).default;
   const token = await getAccessToken();
   const { data } = await axios.get("https://api.spotify.com/v1/me", {
