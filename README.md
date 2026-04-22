@@ -1,37 +1,179 @@
-# Symphony
+# Symphony — AI-Powered Spotify Playlist Engine
 
-## Project Overview
-Symphony is an AI-powered playlist generation and curation engine. The system utilizes multi-agent LLM pipelines to interpret natural language intent, extract track metadata from images, and interface with the Spotify Web API to construct and remix playlists. The architecture focuses on bypassing traditional API read restrictions through vision-based extraction and implementing a robust, state-managed curation workflow.
+> Transform screenshots, natural language prompts, or existing playlists into perfectly curated Spotify playlists using a multi-stage AI pipeline.
 
-## Architecture and Pipeline Design
-The system is built on a modular architecture that separates intent parsing, track discovery, and platform integration.
+---
 
-### Prompt to Playlist Pipeline
-The primary generation workflow follows a 6-stage execution model:
-1. **Intent Parsing**: The system utilizes Gemini 2.5 Flash or Groq to extract mood, era, genre, tempo, and thematic constraints from the user prompt into a structured schema.
-2. **Seed Generation**: A LangGraph state machine generates 25 initial track seeds. This stage includes an evaluation node that verifies the quantity and relevance of the draft tracks before progression.
-3. **Last.fm Expansion**: The seeds are expanded using the Last.fm API to discover similar tracks. The system calculates a combined score based on Last.fm similarity and AI confidence to identify high-quality candidates.
-4. **Curation**: An AI agent selects the optimal tracks and orders them for listening flow, ensuring no consecutive tracks by the same artist and adhering to the target track count.
-5. **Spotify Search**: The system implements a 7-pass waterfall search algorithm to resolve track metadata to Spotify URIs, handling variations in titles and artist formatting.
-6. **Playlist Creation**: The final tracklist is pushed to the Spotify Web API to generate a persistent playlist.
+## What is Symphony?
 
-### Screenshot to Playlist Pipeline
-The vision pipeline utilizes Gemini 2.5 Flash to process UI screenshots of existing playlists. The system extracts track titles and artist names directly from the image data, bypassing Spotify API read-private restrictions. The extracted metadata is then injected into the standard resolution and creation pipeline.
+Symphony is a full-stack, production-grade music utility that removes the friction between "I want to listen to something" and "I have a playlist playing." It uses Google Gemini's multimodal AI, a 6-stage curation pipeline, and the Spotify Web API to generate, remix, and manage playlists from three distinct inputs:
 
-### Remix Pipeline
-The remixing engine employs a LangGraph-powered evaluation agent. The system ingests an existing Spotify playlist, filters tracks against natural language constraints provided by the user, and outputs a curated subset. The state machine includes iterative feedback loops to ensure the remixed selection matches the requested constraints.
+- **A screenshot** of any music queue (Spotify, Apple Music, YouTube, anything)
+- **A natural language prompt** describing a mood, era, or vibe
+- **An existing Spotify playlist URL** to filter or reorder
 
-## Authentication Flow
-The system implements a dual-token architecture to manage Spotify API interactions and mitigate platform restrictions.
+---
+
+## Live Demo
+
+> `http://127.0.0.1:3000` (local) · `/app` for the generator · `/` for the landing page
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | Next.js 16 (App Router), TypeScript, Zustand, TailwindCSS |
+| Backend | Node.js, Express, TypeScript, Prisma ORM |
+| Database | PostgreSQL (Supabase) |
+| AI | Google Gemini 2.5 Flash (text + vision) |
+| Music Graph | Last.fm API |
+| Platform | Spotify Web API (OAuth 2.0 + PKCE) |
+| Auth | Google OAuth 2.0 (JWT + cookies) |
+| Realtime | Server-Sent Events (SSE) |
+
+---
+
+## Architecture
+
+### System Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                         CLIENT (Next.js)                     │
+│   Landing Page  ·  App  ·  Sidebar  ·  Chat History        │
+│   SSE Hooks  ·  PKCE Auth  ·  Zustand State                │
+└────────────────────────────┬────────────────────────────────┘
+                             │ HTTP / SSE
+┌────────────────────────────▼────────────────────────────────┐
+│                      SERVER (Express)                        │
+│   /api/stream/generate   /api/stream/recommend              │
+│   /api/auth/google       /api/chats                        │
+│   /api/auth/login (master)                                  │
+└──────┬──────────────┬──────────────┬───────────────┬────────┘
+       │              │              │               │
+  ┌────▼────┐   ┌─────▼─────┐ ┌────▼────┐   ┌─────▼──────┐
+  │ Gemini  │   │  Last.fm  │ │Spotify  │   │ PostgreSQL │
+  │  2.5   │   │    API    │ │Web API  │   │   Prisma   │
+  └─────────┘   └───────────┘ └─────────┘   └────────────┘
+```
 
 ### Dual-Token Architecture
-1. **User-Level PKCE**: The client-side application utilizes the OAuth 2.0 PKCE flow to obtain user-level access tokens. These tokens are stored in the database and utilized for read operations on the user's private playlists, enabling access to tracklists that would otherwise be protected by scraping restrictions.
-2. **Master Account Token**: The server maintains a persistent Authorization Code flow for a system-level Master Account. This account handles the creation of new playlists and the population of tracks. This separation ensures that the system can generate and host playlists reliably regardless of the individual user's account type or status.
 
-## Environment Variables
-The following environment variables are required for local operation.
+Symphony uses two separate Spotify tokens to work around platform restrictions:
 
-### Server Configuration (`server/.env`)
+```
+Master Account Token (server-side, persistent)
+  → Creates playlists on the Symphony master account
+  → Handles all write operations for anonymous/preview flows
+  → Auto-refreshes via stored refresh token in DB (SpotifyToken model)
+
+User PKCE Token (client-side → server-side storage)
+  → Obtained via frontend PKCE flow
+  → Used for read operations on the user's private playlists (Remix flow)
+  → Stored in the User model (spotifyAccessToken) to enable the "Save to Account" feature
+```
+
+---
+
+## AI Pipelines
+
+### Pipeline 1 — Screenshot to Playlist
+
+```
+User uploads screenshot
+  └─► Gemini Vision extracts track list from image
+        └─► 7-pass Spotify waterfall search resolves URIs
+              └─► Playlist created on master account
+                    └─► SSE streams status updates to client
+                          └─► Embedded player + result shown
+```
+
+Gemini reads any screenshot — Spotify queue, Apple Music, YouTube, a photo of a setlist. Vision model handles it natively with no OCR libraries required.
+
+### Pipeline 2 — Prompt to Playlist (6-Stage)
+
+```
+Stage 1 │ Intent Parser    → Extracts mood, era, genre, tempo, themes
+Stage 2 │ Seed Generator   → Gemini generates 25 specific track seeds via LangGraph
+Stage 3 │ Last.fm Expand   → Finds similar tracks, scores by similarity
+Stage 4 │ AI Curator       → Selects best candidates, orders for flow
+Stage 5 │ Spotify Search   → 7-pass waterfall resolves each track to URI
+Stage 6 │ Playlist Create  → Pushes to Spotify, returns shareable URL
+```
+
+**What makes Stage 4 different:** The curator enforces variety, builds an energy arc, and ensures listening flow across the generated selection.
+
+### Pipeline 3 — Remix
+
+```
+User pastes an existing Spotify playlist URL + a remix prompt
+  └─► Fetcher retrieves tracks from the source playlist
+        └─► LangGraph Remix Agent analyzes tracks against prompt
+              └─► Evaluator node ensures output matches constraints
+                    └─► New curated subset created as a new playlist
+```
+
+---
+
+## Features
+
+### Core
+- **Screenshot → Playlist** — drop any tracklist image, get a Spotify playlist in seconds
+- **Prompt → Playlist** — describe your vibe in plain English, AI does the rest
+- **Remix** — filter and reorder existing Spotify playlists with natural language
+- **Live SSE streaming** — real-time status updates during generation
+- **Vibe Check** — AI generates an analysis of the playlist vibe
+- **Playlist DNA** — estimated mood and energy scores
+
+### Saving & Sharing
+- **24-hour preview** — playlists auto-delete after 24 hours from the master account
+- **Save to your Spotify** — One-click clone to the user's own Spotify library
+- **Auto-cleanup cron** — Periodic job deletes expired playlists from Spotify + DB
+
+---
+
+## Search Algorithm — 7-Pass Waterfall
+
+Every track goes through up to 7 search attempts before being marked as not found:
+
+1. **Strict quoted**: `track:"Title" artist:"Artist"`
+2. **Clean unquoted**: `CleanTitle CleanArtist`
+3. **Raw original**: Full title + all artists
+4. **First artist**: Full title + first artist only
+5. **Title only**: CleanTitle (broader net)
+6. **Strip subtitle**: "Happy - From Despicable Me 2" → "Happy Artist"
+7. **Base title**: Last resort, title only
+
+---
+
+
+
+## Setup & Installation
+
+### Prerequisites
+
+- Node.js v18+
+- PostgreSQL
+- Spotify Developer account
+- Google Cloud Console project (for Google Login)
+- Gemini API Key (Google AI Studio)
+- Last.fm API Key
+
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/VaibhavRajDwivedi/Symphony.git
+
+# Install dependencies
+cd server && npm install
+cd ../client && npm install
+```
+
+### 2. Environment Variables
+
+**`server/.env`**
 ```env
 PORT=5000
 NODE_ENV=development
@@ -56,49 +198,38 @@ SPOTIFY_MASTER_USER_ID=your_spotify_user_id
 LASTFM_API_KEY=your_lastfm_api_key
 LASTFM_SHARED_SECRET=your_lastfm_shared_secret
 
-# Google OAuth (Optional for User Auth)
+# Google OAuth
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 ```
 
-### Client Configuration (`client/.env.local`)
+**`client/.env.local`**
 ```env
 NEXT_PUBLIC_API_URL=http://127.0.0.1:5000
 NEXT_PUBLIC_SPOTIFY_CLIENT_ID=your_spotify_client_id
 NEXT_PUBLIC_SPOTIFY_REDIRECT_URI=http://127.0.0.1:3000/callback
 ```
 
-## Local Development Setup Instructions
-The following steps are required to initialize the development environment.
+### 3. Database & Auth Setup
 
-### Prerequisites
-- Node.js (v18+)
-- PostgreSQL
-- Spotify Developer Account
-- Google Cloud Console Project (for OAuth)
+1. Run `npx prisma db push` in the server directory.
+2. In the Spotify Dashboard, add the Redirect URIs specified in the `.env` files.
+3. Authenticate the Master Account by visiting `http://127.0.0.1:5000/api/auth/login`.
 
-### Execution Steps
-1. **Database Initialization**: Navigate to the server directory and run Prisma migrations.
-   ```bash
-   cd server
-   npm install
-   npx prisma migrate dev
-   ```
-2. **Server Execution**: Start the backend Express server.
-   ```bash
-   npm run dev
-   ```
-3. **Master Authentication**: Authenticate the master Spotify account by visiting `http://127.0.0.1:5000/api/auth/login`. This step is mandatory for playlist creation.
-4. **Client Execution**: Navigate to the client directory and start the Next.js development server.
-   ```bash
-   cd client
-   npm install
-   npm run dev
-   ```
+---
 
-## Known API Constraints
-The following technical constraints are present due to external API limitations:
-1. **Spotify Development Mode**: Applications in development mode are limited to 25 specific allow-listed users.
-2. **Spotify 2026 Restrictions**: Recent updates to the Spotify API restrict the ability to fetch playlist data for certain accounts. The system utilizes the user-level PKCE token and Gemini Vision extraction as workarounds for these limitations.
-3. **Rate Limiting**: The Spotify Search API is subject to rate limits. The system implements a 200ms sequential delay between search requests to prevent 429 status codes.
-4. **Context Window**: Extremely large playlists (300+ tracks) may exceed the context window of certain AI providers during the Remix flow. Gemini 2.5 Flash is recommended for large-scale playlist processing.
+## Known Constraints
+
+### Spotify Development Mode
+Apps are limited to **25 allow-listed users**. Add testers manually via the Spotify Dashboard.
+
+### API Changes
+The system uses the latest Spotify endpoints (`/playlists/{id}/items`) and utilizes Vision AI to bypass platform read restrictions on private queues.
+
+### Rate Limits
+Spotify Search is subject to rate limits. The system implements sequential search with built-in delays to mitigate 429 errors.
+
+---
+
+## License
+MIT — built as a portfolio project. Not affiliated with Spotify or Google.
