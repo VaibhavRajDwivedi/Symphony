@@ -41,21 +41,21 @@ Symphony is a full-stack, production-grade music utility that removes the fricti
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                         CLIENT (Next.js)                     │
-│   Landing Page  ·  App  ·  Sidebar  ·  Chat History        │
-│   SSE Hooks  ·  PKCE Auth  ·  Zustand State                │
+│                         CLIENT (Next.js)                    │
+│   Landing Page  ·  App  ·  Sidebar  ·  Chat History         │
+│   SSE Hooks  ·  PKCE Auth  ·  Zustand State                 │
 └────────────────────────────┬────────────────────────────────┘
                              │ HTTP / SSE
 ┌────────────────────────────▼────────────────────────────────┐
-│                      SERVER (Express)                        │
-│   /api/stream/generate   /api/stream/recommend              │
-│   /api/auth/google       /api/chats                        │
+│                      SERVER (Express)                       │
+│   /api/stream/generate   /api/stream/recommend              │  
+│   /api/auth/google       /api/chats                         │
 │   /api/auth/login (master)                                  │
 └──────┬──────────────┬──────────────┬───────────────┬────────┘
        │              │              │               │
   ┌────▼────┐   ┌─────▼─────┐ ┌────▼────┐   ┌─────▼──────┐
   │ Gemini  │   │  Last.fm  │ │Spotify  │   │ PostgreSQL │
-  │  2.5   │   │    API    │ │Web API  │   │   Prisma   │
+  │  2.5    │   │    API    │ │Web API  │   │   Prisma   │
   └─────────┘   └───────────┘ └─────────┘   └────────────┘
 ```
 
