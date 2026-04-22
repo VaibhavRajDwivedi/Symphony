@@ -1,18 +1,23 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-export const dynamic = "force-dynamic";
 
-export default function CallbackPage() {
+/*
+ Symphony Auth Callback Handler
+ Isolated to prevent Next.js Prerender errors during Vercel build.
+*/
+function CallbackHandler() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    // Standard Spotify Auth Parameters
     const code = searchParams.get("code");
     const state = searchParams.get("state");
     const error = searchParams.get("error");
 
-    // Posts message to parent and closes if opened as popup
+    // Flow A: Popup Logic
+    // If the login was opened in a popup, we communicate back to the parent window
     if (window.opener) {
       if (error) {
         window.opener.postMessage(
@@ -29,8 +34,8 @@ export default function CallbackPage() {
       return;
     }
 
-    // Provides fallback handling if opened as redirect due to blocked popup
-    // Routes back to main page with authorization code in query parameters
+    // Flow B: Direct Redirect Fallback
+    // If popups were blocked or it's a mobile redirect, send user back to /app
     if (code && state) {
       window.location.href = `/app?code=${code}&state=${state}`;
     } else if (error) {
@@ -61,8 +66,8 @@ export default function CallbackPage() {
           animation: "spin 1s linear infinite",
         }}
       />
-      <p style={{ color: "#a0a0a0", fontSize: "14px" }}>
-        Connecting to Spotify...
+      <p style={{ color: "#a0a0a0", fontSize: "14px", fontWeight: 500 }}>
+        Orchestrating Symphony...
       </p>
       <style>{`
         @keyframes spin {
@@ -70,5 +75,21 @@ export default function CallbackPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+/*
+ Main Page Export
+ The Suspense boundary is strictly required by Next.js for useSearchParams()
+*/
+export default function CallbackPage() {
+  return (
+    <Suspense 
+      fallback={
+        <div style={{ minHeight: "100vh", background: "#080808" }} />
+      }
+    >
+      <CallbackHandler />
+    </Suspense>
   );
 }
