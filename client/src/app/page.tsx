@@ -1,424 +1,181 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Music2, Upload, Sparkles, Share2, ArrowRight, ImageIcon, MessageSquare, Zap, Clock, Play, Heart } from "lucide-react";
+import { Music2, Upload, Sparkles, Share2, ArrowRight, ImageIcon, MessageSquare, Zap, Clock, Play, Heart, Terminal, GitBranch, Database, Cpu } from "lucide-react";
 
 export default function LandingPage() {
   const router = useRouter();
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg-primary)", overflowX: "hidden" }}>
-
+    <div className="min-h-screen bg-black text-zinc-300 selection:bg-emerald-500/30 overflow-x-hidden font-sans">
+      
       {/* ── Navbar ── */}
-      <nav style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-        padding: "0 2rem", height: "64px",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        borderBottom: "1px solid var(--border)",
-        background: "rgba(8,8,8,0.85)", backdropFilter: "blur(12px)",
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <div style={{ width: "32px", height: "32px", borderRadius: "8px", background: "var(--green)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Music2 size={18} color="#000" strokeWidth={2.5} />
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 h-16 flex items-center justify-between border-b border-zinc-800/80 bg-black/80 backdrop-blur-md">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-md bg-emerald-500 flex items-center justify-center">
+            <Music2 size={18} className="text-black" strokeWidth={2.5} />
           </div>
-          <span style={{ fontFamily: "var(--font-heading)", fontSize: "20px", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.03em" }}>
-            Symphony
-          </span>
+          <span className="text-xl font-bold text-white tracking-tight">Symphony</span>
         </div>
         <button
           onClick={() => router.push("/app")}
-          style={{
-            display: "flex", alignItems: "center", gap: "6px",
-            padding: "8px 20px", borderRadius: "8px",
-            background: "var(--green)", color: "#000",
-            border: "none", cursor: "pointer",
-            fontFamily: "var(--font-heading)", fontSize: "14px", fontWeight: 700,
-          }}
+          className="flex items-center gap-2 px-5 py-2 rounded-md bg-emerald-500 text-black text-sm font-bold hover:bg-emerald-400 transition-colors"
         >
           Open App <ArrowRight size={14} />
         </button>
       </nav>
 
       {/* ── Hero ── */}
-      <section style={{
-        minHeight: "100vh", display: "flex", flexDirection: "column",
-        alignItems: "center", justifyContent: "center",
-        padding: "120px 24px 80px", textAlign: "center", position: "relative",
-      }}>
-        <div style={{
-          position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)",
-          width: "600px", height: "400px",
-          background: "radial-gradient(ellipse, rgba(29,185,84,0.08) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
+      <section className="min-h-screen flex flex-col items-center justify-center pt-32 pb-20 px-6 text-center relative">
+        <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-emerald-500/5 blur-[120px] pointer-events-none rounded-full" />
 
-        <div className="animate-fade-up" style={{
-          display: "inline-flex", alignItems: "center", gap: "6px",
-          padding: "4px 14px", borderRadius: "20px",
-          border: "1px solid rgba(29,185,84,0.3)",
-          background: "rgba(29,185,84,0.05)", marginBottom: "32px",
-        }}>
-          <Sparkles size={12} color="var(--green)" />
-          <span style={{ fontSize: "12px", color: "var(--green)", fontFamily: "var(--font-body)", letterSpacing: "0.04em" }}>
-            Powered by Gemini 2.5 Flash + Spotify API
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5 mb-8">
+          <Cpu size={14} className="text-emerald-400" />
+          <span className="text-xs font-mono text-emerald-400 tracking-wider uppercase">
+            Gemini 2.5 Flash + LangGraph + Spotify
           </span>
         </div>
 
-        <h1 className="animate-fade-up" style={{
-          fontFamily: "var(--font-heading)",
-          fontSize: "clamp(48px, 8vw, 88px)",
-          fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.0,
-          color: "var(--text-primary)", marginBottom: "24px", maxWidth: "800px",
-        }}>
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-8 max-w-4xl">
           Screenshot to Spotify.<br />
-          <span style={{ color: "var(--green)" }}>In seconds.</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">
+            In seconds.
+          </span>
         </h1>
 
-        <p className="animate-fade-up" style={{
-          fontSize: "clamp(16px, 2vw, 20px)", color: "var(--text-secondary)",
-          maxWidth: "520px", lineHeight: 1.6, marginBottom: "16px",
-          fontFamily: "var(--font-body)",
-        }}>
-          Upload any tracklist screenshot or describe your vibe.
-          Get an instant Spotify playlist — listen immediately, save permanently.
+        <p className="text-lg md:text-xl text-zinc-400 max-w-2xl leading-relaxed mb-4">
+          Drop any tracklist screenshot or describe your vibe. 
+          The 6-stage AI orchestration engine builds an instant Spotify playlist.
         </p>
-
-        {/* Zero friction callout */}
-        <p className="animate-fade-up" style={{
-          fontSize: "14px", color: "var(--text-muted)",
-          marginBottom: "40px", fontFamily: "var(--font-body)",
-        }}>
-          No account needed to generate. Login only if you want to save permanently.
+        <p className="text-sm font-mono text-zinc-500 mb-10">
+          &gt; NO_ACCOUNT_REQUIRED --flag save_optional
         </p>
-
-        <div className="animate-fade-up" style={{ display: "flex", gap: "12px", flexWrap: "wrap", justifyContent: "center" }}>
+        <div className="flex flex-wrap items-center justify-center gap-4">
           <button
             onClick={() => router.push("/app")}
-            style={{
-              display: "flex", alignItems: "center", gap: "8px",
-              padding: "14px 32px", borderRadius: "10px",
-              background: "var(--green)", color: "#000",
-              border: "none", cursor: "pointer",
-              fontFamily: "var(--font-heading)", fontSize: "16px", fontWeight: 700,
-              transition: "opacity 0.2s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+            className="flex items-center gap-2 px-8 py-4 rounded-lg bg-emerald-500 text-black text-base font-bold hover:bg-emerald-400 transition-colors"
           >
-            Try it free <ArrowRight size={16} />
+            Execute Pipeline <ArrowRight size={16} />
           </button>
           <a
-            href="#how-it-works"
-            style={{
-              display: "flex", alignItems: "center", gap: "8px",
-              padding: "14px 32px", borderRadius: "10px",
-              border: "1px solid var(--border)", color: "var(--text-secondary)",
-              textDecoration: "none", cursor: "pointer",
-              fontFamily: "var(--font-heading)", fontSize: "16px", fontWeight: 600,
-              transition: "all 0.2s",
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--border-hover)"; e.currentTarget.style.color = "var(--text-primary)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-secondary)"; }}
+            href="#architecture"
+            className="flex items-center gap-2 px-8 py-4 rounded-lg border border-zinc-700 text-white font-semibold hover:border-zinc-500 hover:bg-zinc-900 transition-all"
           >
-            See how it works
+            View Architecture
           </a>
         </div>
 
-        {/* Mock player preview */}
-        <div className="animate-fade-up" style={{
-          marginTop: "64px", width: "100%", maxWidth: "640px",
-          borderRadius: "16px", border: "1px solid var(--border)",
-          background: "var(--bg-card)", overflow: "hidden",
-          boxShadow: "0 40px 80px rgba(0,0,0,0.5)",
-        }}>
-          {/* Mock browser bar */}
-          <div style={{
-            padding: "12px 16px", borderBottom: "1px solid var(--border)",
-            display: "flex", alignItems: "center", gap: "8px",
-            background: "var(--bg-secondary)",
-          }}>
-            {["#ff5f57","#ffbd2e","#28c840"].map((c) => (
-              <div key={c} style={{ width: "12px", height: "12px", borderRadius: "50%", background: c }} />
-            ))}
-            <div style={{
-              flex: 1, marginLeft: "8px", padding: "4px 12px",
-              background: "var(--bg-primary)", borderRadius: "6px",
-              fontSize: "12px", color: "var(--text-muted)", fontFamily: "var(--font-body)",
-            }}>
-              symphony.app
+        {/* Terminal Execution Mock */}
+        <div className="mt-20 w-full max-w-3xl rounded-xl border border-zinc-800 bg-[#0a0a0a] overflow-hidden shadow-2xl text-left">
+          <div className="flex items-center gap-2 px-4 py-3 border-b border-zinc-800 bg-zinc-900/50">
+            <div className="flex gap-2">
+              <div className="w-3 h-3 rounded-full bg-zinc-700" />
+              <div className="w-3 h-3 rounded-full bg-zinc-700" />
+              <div className="w-3 h-3 rounded-full bg-zinc-700" />
             </div>
+            <span className="ml-4 text-xs font-mono text-zinc-500">~/symphony/execution-log</span>
           </div>
-
-          {/* Mock Spotify embed */}
-          <div style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "12px" }}>
-            <div style={{
-              padding: "16px", borderRadius: "12px",
-              background: "var(--bg-secondary)", border: "1px solid var(--border)",
-              display: "flex", alignItems: "center", gap: "16px",
-            }}>
-              <div style={{ width: "56px", height: "56px", borderRadius: "8px", background: "var(--green)", opacity: 0.3, flexShrink: 0 }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ height: "14px", borderRadius: "4px", background: "var(--border-hover)", width: "60%", marginBottom: "8px" }} />
-                <div style={{ height: "10px", borderRadius: "4px", background: "var(--border)", width: "40%" }} />
-              </div>
-              <div style={{
-                width: "40px", height: "40px", borderRadius: "50%",
-                background: "var(--green)", display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <Play size={16} color="#000" fill="#000" />
-              </div>
-            </div>
-
-            {/* 24hr warning mock */}
-            <div style={{
-              padding: "10px 14px", borderRadius: "8px",
-              background: "rgba(255,185,0,0.06)",
-              border: "1px solid rgba(255,185,0,0.2)",
-              fontSize: "12px", color: "#c9a227", fontFamily: "var(--font-body)",
-              textAlign: "center",
-            }}>
-              ⚠️ This playlist will be automatically deleted in 24 hours
-            </div>
-
-            {/* Save CTA mock */}
-            <div style={{
-              padding: "12px", borderRadius: "10px",
-              background: "var(--green)",
-              display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
-            }}>
-              <Heart size={16} color="#000" />
-              <span style={{ fontSize: "14px", fontWeight: 700, color: "#000", fontFamily: "var(--font-heading)" }}>
-                Create Playlist in My Account Instead
-              </span>
-            </div>
+          <div className="p-6 font-mono text-sm flex flex-col gap-3">
+            <div className="text-zinc-400"><span className="text-emerald-400">➜</span> ./symphony generate --input user_screenshot.png</div>
+            <div className="text-zinc-500">[SYS] Initializing LangGraph multi-agent pipeline...</div>
+            <div className="text-zinc-300">[AI]  Gemini 2.5 Vision: Extracted 24 tracks from image.</div>
+            <div className="text-zinc-500">[SYS] Routing intent via Groq API (34ms)...</div>
+            <div className="text-zinc-300">[API] Last.fm: Expanding graph to 50 relational nodes.</div>
+            <div className="text-zinc-300">[AI]  Curating final output. Filtering duplicates.</div>
+            <div className="text-emerald-400">[SUCCESS] Playlist generated. Spotify ID: 7xG2...</div>
+            <div className="text-zinc-500 animate-pulse">_</div>
           </div>
         </div>
       </section>
 
-      {/* ── How it works ── */}
-      <section id="how-it-works" style={{ padding: "100px 24px", borderTop: "1px solid var(--border)" }}>
-        <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-          <p style={{
-            textAlign: "center", fontSize: "12px", fontWeight: 600,
-            letterSpacing: "0.1em", color: "var(--green)",
-            textTransform: "uppercase", marginBottom: "16px", fontFamily: "var(--font-body)",
-          }}>
-            How it works
-          </p>
-          <h2 style={{
-            textAlign: "center", fontFamily: "var(--font-heading)",
-            fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800,
-            color: "var(--text-primary)", letterSpacing: "-0.03em", marginBottom: "64px",
-          }}>
-            Zero friction. Full control.
+      {/* ── Architecture (New Section) ── */}
+      <section id="architecture" className="py-24 px-6 border-t border-zinc-900">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-xs font-mono text-emerald-500 mb-4 uppercase tracking-widest">// System Design</div>
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-16">
+            The Orchestration Pipeline
           </h2>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "24px" }}>
-            {[
-              {
-                icon: <Upload size={24} />,
-                step: "01",
-                title: "Upload or describe",
-                desc: "Drop a screenshot of any tracklist — Spotify, Apple Music, YouTube — or just describe your mood in plain English.",
-                tag: null,
-              },
-              {
-                icon: <Sparkles size={24} />,
-                step: "02",
-                title: "AI builds your playlist",
-                desc: "Gemini reads your input, Last.fm expands the selection, and our 6-stage curation engine picks the perfect tracks.",
-                tag: null,
-              },
-              {
-                icon: <Play size={24} />,
-                step: "03",
-                title: "Listen instantly",
-                desc: "Your playlist is live on Symphony's Spotify account. Listen right away via the embedded player. No account needed.",
-                tag: "Free preview",
-              },
-              {
-                icon: <Heart size={24} />,
-                step: "04",
-                title: "Save to your account",
-                desc: "Love the mix? One click clones it directly into your own Spotify library. Yours forever, even after the preview expires.",
-                tag: "Optional",
-              },
-            ].map(({ icon, step, title, desc, tag }) => (
-              <div key={step} style={{
-                padding: "28px", borderRadius: "16px",
-                border: "1px solid var(--border)", background: "var(--bg-card)",
-                display: "flex", flexDirection: "column", gap: "16px",
-                position: "relative",
-              }}>
-                {tag && (
-                  <div style={{
-                    position: "absolute", top: "16px", right: "16px",
-                    padding: "2px 10px", borderRadius: "20px",
-                    background: "rgba(29,185,84,0.1)",
-                    border: "1px solid rgba(29,185,84,0.2)",
-                    fontSize: "11px", color: "var(--green)", fontFamily: "var(--font-body)",
-                  }}>
-                    {tag}
-                  </div>
-                )}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <div style={{
-                    width: "48px", height: "48px", borderRadius: "12px",
-                    background: "rgba(29,185,84,0.08)",
-                    border: "1px solid rgba(29,185,84,0.2)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    color: "var(--green)",
-                  }}>
-                    {icon}
-                  </div>
-                  <span style={{ fontSize: "32px", fontWeight: 800, color: "var(--border-hover)", fontFamily: "var(--font-heading)" }}>
-                    {step}
-                  </span>
-                </div>
-                <h3 style={{ fontFamily: "var(--font-heading)", fontSize: "18px", fontWeight: 700, color: "var(--text-primary)" }}>
-                  {title}
-                </h3>
-                <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.6, fontFamily: "var(--font-body)" }}>
-                  {desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── The two modes explained ── */}
-      <section style={{ padding: "100px 24px", borderTop: "1px solid var(--border)" }}>
-        <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-          <p style={{
-            textAlign: "center", fontSize: "12px", fontWeight: 600,
-            letterSpacing: "0.1em", color: "var(--green)",
-            textTransform: "uppercase", marginBottom: "16px", fontFamily: "var(--font-body)",
-          }}>
-            Two ways to create
-          </p>
-          <h2 style={{
-            textAlign: "center", fontFamily: "var(--font-heading)",
-            fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800,
-            color: "var(--text-primary)", letterSpacing: "-0.03em", marginBottom: "64px",
-          }}>
-            Screenshot or prompt — your choice
-          </h2>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(380px, 1fr))", gap: "24px" }}>
-            {/* Screenshot mode */}
-            <div style={{
-              padding: "36px", borderRadius: "20px",
-              border: "1px solid rgba(29,185,84,0.2)",
-              background: "linear-gradient(135deg, rgba(29,185,84,0.04) 0%, transparent 100%)",
-            }}>
-              <div style={{
-                width: "52px", height: "52px", borderRadius: "14px",
-                background: "rgba(29,185,84,0.1)", border: "1px solid rgba(29,185,84,0.2)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                color: "var(--green)", marginBottom: "20px",
-              }}>
-                <ImageIcon size={24} />
-              </div>
-              <h3 style={{ fontFamily: "var(--font-heading)", fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "12px" }}>
-                Screenshot to Playlist
-              </h3>
-              <p style={{ fontSize: "15px", color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: "20px", fontFamily: "var(--font-body)" }}>
-                Saw a great queue on someone's Spotify? A YouTube playlist? Apple Music? Just screenshot it and drop it in. Gemini reads the image and builds the playlist instantly.
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-8 rounded-xl border border-zinc-800 bg-zinc-950/50 hover:border-emerald-500/50 transition-colors group">
+              <Terminal className="text-zinc-500 mb-6 group-hover:text-emerald-400 transition-colors" size={32} />
+              <h3 className="text-lg font-bold text-white mb-3">1. Ingestion & Parsing</h3>
+              <p className="text-sm text-zinc-400 leading-relaxed font-mono">
+                Multimodal input handling. Screenshots are fed to Gemini Vision for OCR and context extraction. Text prompts are tokenized and routed.
               </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                {["Works with any music app", "Reads screenshots accurately", "No manual typing needed"].map((f) => (
-                  <div key={f} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--green)", flexShrink: 0 }} />
-                    <span style={{ fontSize: "13px", color: "var(--text-secondary)", fontFamily: "var(--font-body)" }}>{f}</span>
-                  </div>
-                ))}
-              </div>
             </div>
-
-            {/* Prompt mode */}
-            <div style={{
-              padding: "36px", borderRadius: "20px",
-              border: "1px solid var(--border)",
-              background: "var(--bg-card)",
-            }}>
-              <div style={{
-                width: "52px", height: "52px", borderRadius: "14px",
-                background: "rgba(255,255,255,0.04)", border: "1px solid var(--border)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                color: "var(--text-secondary)", marginBottom: "20px",
-              }}>
-                <MessageSquare size={24} />
-              </div>
-              <h3 style={{ fontFamily: "var(--font-heading)", fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "12px" }}>
-                Prompt to Playlist
-              </h3>
-              <p style={{ fontSize: "15px", color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: "20px", fontFamily: "var(--font-body)" }}>
-                Describe your vibe in plain English. "Late night indie for studying", "Hindi 90s classics", "gym music that hits hard" — our 6-stage AI pipeline curates the perfect mix.
+            <div className="p-8 rounded-xl border border-zinc-800 bg-zinc-950/50 hover:border-emerald-500/50 transition-colors group">
+              <GitBranch className="text-zinc-500 mb-6 group-hover:text-emerald-400 transition-colors" size={32} />
+              <h3 className="text-lg font-bold text-white mb-3">2. LangGraph Curation</h3>
+              <p className="text-sm text-zinc-400 leading-relaxed font-mono">
+                A 6-stage autonomous agent pipeline. Queries Last.fm for musical topology, utilizes Groq for ultra-low latency decision making, and filters outliers.
               </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                {["6-stage AI curation pipeline", "Last.fm music graph expansion", "Gemini-powered final curation"].map((f) => (
-                  <div key={f} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--text-muted)", flexShrink: 0 }} />
-                    <span style={{ fontSize: "13px", color: "var(--text-secondary)", fontFamily: "var(--font-body)" }}>{f}</span>
-                  </div>
-                ))}
-              </div>
+            </div>
+            <div className="p-8 rounded-xl border border-zinc-800 bg-zinc-950/50 hover:border-emerald-500/50 transition-colors group">
+              <Database className="text-zinc-500 mb-6 group-hover:text-emerald-400 transition-colors" size={32} />
+              <h3 className="text-lg font-bold text-white mb-3">3. Execution & Sync</h3>
+              <p className="text-sm text-zinc-400 leading-relaxed font-mono">
+                Batch mutations to the Spotify API. Creates a temporary session container, allowing instant playback before permanent DB persistence via Prisma.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Features ── */}
-      <section style={{ padding: "100px 24px", borderTop: "1px solid var(--border)" }}>
-        <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-          <p style={{
-            textAlign: "center", fontSize: "12px", fontWeight: 600,
-            letterSpacing: "0.1em", color: "var(--green)",
-            textTransform: "uppercase", marginBottom: "16px", fontFamily: "var(--font-body)",
-          }}>
-            Features
-          </p>
-          <h2 style={{
-            textAlign: "center", fontFamily: "var(--font-heading)",
-            fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800,
-            color: "var(--text-primary)", letterSpacing: "-0.03em", marginBottom: "64px",
-          }}>
-            Built different
+      {/* ── Two Modes ── */}
+      <section className="py-24 px-6 border-t border-zinc-900 bg-zinc-950/20">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-xs font-mono text-emerald-500 mb-4 uppercase tracking-widest">// Input Vectors</div>
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-16">
+            Image or String.
           </h2>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-10 rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/5 to-transparent relative overflow-hidden">
+              <ImageIcon className="text-emerald-400 mb-8" size={40} />
+              <h3 className="text-2xl font-bold text-white mb-4">Screenshot.</h3>
+              <p className="text-zinc-400 leading-relaxed mb-6">
+                Saw a fire queue on YouTube, a TikTok tracklist, or an Apple Music mix? Drop the image. The vision model reconstructs the sequence into standard Spotify URIs.
+              </p>
+              <ul className="space-y-3 font-mono text-sm text-zinc-500">
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Bypasses platform walled gardens</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> High-accuracy OCR mapping</li>
+              </ul>
+            </div>
+
+            <div className="p-10 rounded-2xl border border-zinc-800 bg-[#0a0a0a]">
+              <MessageSquare className="text-zinc-500 mb-8" size={40} />
+              <h3 className="text-2xl font-bold text-white mb-4">Prompt.</h3>
+              <p className="text-zinc-400 leading-relaxed mb-6">
+                Define parameters in plain text. "Late night indie coding", "90s boom bap", or "high BPM dark synth". The curation engine builds the topology.
+              </p>
+              <ul className="space-y-3 font-mono text-sm text-zinc-500">
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-zinc-600" /> Semantic intent recognition</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-zinc-600" /> Vibe and tempo clustering</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Features Grid ── */}
+      <section className="py-24 px-6 border-t border-zinc-900">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: <Zap size={20} />, title: "20 second generation", desc: "From screenshot to playable Spotify playlist in under 20 seconds." },
-              { icon: <Play size={20} />, title: "Instant preview", desc: "Embedded Spotify player — listen right away, no login needed." },
-              { icon: <Heart size={20} />, title: "One-click save", desc: "Clone the playlist to your own Spotify account with one click." },
-              { icon: <Clock size={20} />, title: "Auto-cleanup", desc: "Previews auto-delete after 24 hours. Clean, privacy-first." },
-              { icon: <Sparkles size={20} />, title: "AI curation", desc: "Not just search — a 6-stage pipeline ensures quality results." },
-              { icon: <Share2 size={20} />, title: "Shareable links", desc: "Share the playlist link with anyone. They can save it too." },
-            ].map(({ icon, title, desc }) => (
-              <div key={title} style={{
-                padding: "24px", borderRadius: "14px",
-                border: "1px solid var(--border)", background: "var(--bg-card)",
-                display: "flex", flexDirection: "column", gap: "12px",
-                transition: "border-color 0.2s",
-              }}
-                onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--border-hover)")}
-                onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
-              >
-                <div style={{
-                  width: "40px", height: "40px", borderRadius: "10px",
-                  background: "rgba(29,185,84,0.08)", border: "1px solid rgba(29,185,84,0.15)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  color: "var(--green)",
-                }}>
-                  {icon}
+              { icon: <Zap size={20} />, title: "< 20s Latency", desc: "From image upload to playable Spotify payload in under 20 seconds." },
+              { icon: <Play size={20} />, title: "Headless Preview", desc: "Listen instantly via embedded iframe. No Spotify auth required for viewing." },
+              { icon: <Heart size={20} />, title: "One-Click Clone", desc: "OAuth integration allows 1-click cloning to your personal Spotify account." },
+              { icon: <Clock size={20} />, title: "Cron Cleanup", desc: "Temporary playlists are purged automatically from our servers after 24 hours." },
+              { icon: <Sparkles size={20} />, title: "Graph Curation", desc: "Not generic search. Last.fm relational data ensures deep, accurate cuts." },
+              { icon: <Share2 size={20} />, title: "Stateless Sharing", desc: "Share URLs instantly. State is maintained server-side for easy distribution." },
+            ].map((f, i) => (
+              <div key={i} className="p-6 rounded-xl border border-zinc-800 bg-zinc-950 hover:border-zinc-600 transition-colors group">
+                <div className="w-10 h-10 rounded-lg bg-zinc-900 flex items-center justify-center text-zinc-400 group-hover:text-white transition-colors mb-4">
+                  {f.icon}
                 </div>
-                <h3 style={{ fontFamily: "var(--font-heading)", fontSize: "15px", fontWeight: 700, color: "var(--text-primary)" }}>
-                  {title}
-                </h3>
-                <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6, fontFamily: "var(--font-body)" }}>
-                  {desc}
-                </p>
+                <h3 className="font-bold text-white mb-2">{f.title}</h3>
+                <p className="text-sm text-zinc-500 leading-relaxed font-mono">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -426,68 +183,34 @@ export default function LandingPage() {
       </section>
 
       {/* ── CTA Banner ── */}
-      <section style={{ padding: "100px 24px", borderTop: "1px solid var(--border)" }}>
-        <div style={{
-          maxWidth: "700px", margin: "0 auto", textAlign: "center",
-          padding: "64px 40px", borderRadius: "24px",
-          border: "1px solid rgba(29,185,84,0.2)",
-          background: "linear-gradient(135deg, rgba(29,185,84,0.06) 0%, transparent 100%)",
-          position: "relative", overflow: "hidden",
-        }}>
-          <div style={{
-            position: "absolute", top: "-50%", left: "50%", transform: "translateX(-50%)",
-            width: "400px", height: "400px",
-            background: "radial-gradient(circle, rgba(29,185,84,0.1) 0%, transparent 70%)",
-            pointerEvents: "none",
-          }} />
-          <h2 style={{
-            fontFamily: "var(--font-heading)",
-            fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800,
-            color: "var(--text-primary)", letterSpacing: "-0.03em", marginBottom: "16px",
-          }}>
-            Your next playlist is<br />
-            <span style={{ color: "var(--green)" }}>one screenshot away.</span>
+      <section className="py-24 px-6 border-t border-zinc-900">
+        <div className="max-w-4xl mx-auto text-center p-12 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 relative overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-radial-gradient from-emerald-500/10 to-transparent pointer-events-none" />
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-6">
+            Initialize your next session.
           </h2>
-          <p style={{
-            fontSize: "16px", color: "var(--text-secondary)",
-            marginBottom: "32px", lineHeight: 1.6, fontFamily: "var(--font-body)",
-          }}>
-            No account needed. No setup. Just drop an image or type a prompt.
+          <p className="text-zinc-400 font-mono text-sm mb-8">
+            Deploy a custom queue in seconds. Zero config required.
           </p>
           <button
             onClick={() => router.push("/app")}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: "8px",
-              padding: "16px 40px", borderRadius: "10px",
-              background: "var(--green)", color: "#000",
-              border: "none", cursor: "pointer",
-              fontFamily: "var(--font-heading)", fontSize: "16px", fontWeight: 700,
-              transition: "opacity 0.2s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-emerald-500 text-black font-bold hover:bg-emerald-400 transition-colors"
           >
-            Try Symphony free <ArrowRight size={16} />
+            Launch Symphony <ArrowRight size={16} />
           </button>
         </div>
       </section>
 
       {/* ── Footer ── */}
-      <footer style={{
-        padding: "32px 24px", borderTop: "1px solid var(--border)",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        flexWrap: "wrap", gap: "16px",
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <div style={{ width: "24px", height: "24px", borderRadius: "6px", background: "var(--green)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Music2 size={14} color="#000" />
+      <footer className="py-8 px-6 border-t border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded flex items-center justify-center bg-zinc-800">
+            <Music2 size={12} className="text-white" />
           </div>
-          <span style={{ fontFamily: "var(--font-heading)", fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
-            Symphony
-          </span>
+          <span className="font-bold text-white tracking-tight">Symphony</span>
         </div>
-        <p style={{ fontSize: "13px", color: "var(--text-muted)", fontFamily: "var(--font-body)" }}>
-          Built with Gemini AI · Spotify API · Last.fm
+        <p className="text-xs font-mono text-zinc-600">
+          STACK: NEXT.JS / LANGGRAPH / PRISMA / SUPABASE / GROQ
         </p>
       </footer>
     </div>
