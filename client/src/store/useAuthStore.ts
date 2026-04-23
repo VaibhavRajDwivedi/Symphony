@@ -41,9 +41,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   login: () => {
-    // Redirects completely to trigger backend OAuth flow
-    window.location.href = API_BASE;
-  },
+  window.location.href = "https://symphony-faql.onrender.com/api/auth/google";
+},
 
   logout: async () => {
     set({ isLoading: true });
