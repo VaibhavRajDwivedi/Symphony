@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import { env } from "../config/env";
 
 export interface ChatSession {
   id: string;
@@ -25,7 +26,7 @@ interface ChatState {
 
 // Configures axios to send cookies
 axios.defaults.withCredentials = true;
-const API_BASE = "http://127.0.0.1:5000/api/chats";
+const API_BASE = `${env.NEXT_PUBLIC_API_URL}/api/chats`;
 
 export const useChatStore = create<ChatState>((set, get) => ({
   chats: [],
@@ -75,5 +76,3 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }
   },
 }));
-
-

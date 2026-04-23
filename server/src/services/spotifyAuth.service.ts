@@ -94,7 +94,7 @@ export async function getAccessToken(): Promise<string> {
   if (!stored) {
     throw new Error(
       "No Spotify master token found. " +
-        "Visit http://127.0.0.1:5000/api/auth/login to authenticate."
+        `Visit ${env.API_URL}/api/auth/login to authenticate.`
     );
   }
 

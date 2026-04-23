@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import { env } from "../config/env";
 
 export interface User {
   id: string;
@@ -22,7 +23,7 @@ interface AuthState {
 
 // Configures axios to send cookies
 axios.defaults.withCredentials = true;
-const API_BASE = "http://127.0.0.1:5000/api/auth/google";
+const API_BASE = `${env.NEXT_PUBLIC_API_URL}/api/auth/google`;
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,

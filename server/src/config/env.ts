@@ -14,6 +14,7 @@ export const env = {
   PORT: parseInt(process.env.PORT ?? "5000", 10),
   NODE_ENV: process.env.NODE_ENV ?? "development",
   CLIENT_URL: process.env.CLIENT_URL ?? "http://127.0.0.1:3000",
+  BACKEND_URL: process.env.BACKEND_URL ?? (process.env.NODE_ENV === "production" ? "" : `http://127.0.0.1:${process.env.PORT ?? "5000"}`),
   JWT_SECRET: process.env.JWT_SECRET || "your_jwt_secret_here",
 
   // Database
@@ -39,6 +40,11 @@ export const env = {
   // LastFM
   LASTFM_API_KEY: requireEnv("LASTFM_API_KEY"),
   LASTFM_SHARED_SECRET: requireEnv("LASTFM_SHARED_SECRET"),
+
+  // Computed
+  get API_URL() {
+    return this.BACKEND_URL;
+  },
 } as const;
 
 

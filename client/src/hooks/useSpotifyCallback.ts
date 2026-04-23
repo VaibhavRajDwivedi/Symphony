@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { exchangeCodeForToken } from "../lib/spotifyPKCE";
 import { useAuthStore } from "../store/useAuthStore";
 import axios from "axios";
+import { env } from "../config/env";
 
-const API_BASE = "http://127.0.0.1:5000/api/auth/google";
+const API_BASE = `${env.NEXT_PUBLIC_API_URL}/api/auth/google`;
 
 /**
  * Runs once auth is initialized. If Spotify redirected back to this page with

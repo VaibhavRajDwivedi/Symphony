@@ -16,16 +16,11 @@ import streamRoutes from "./routes/stream.routes.js";
 const app = express();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
-const CLIENT_URL = env.CLIENT_URL || "http://127.0.0.1:3000";
 
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [
-      CLIENT_URL,
-      "http://localhost:3000",
-      "http://127.0.0.1:3000"
-    ],
+    origin: [env.CLIENT_URL],
     credentials: true,
   })
 );
@@ -53,10 +48,10 @@ app.use(errorHandler);
 // ─── Start ────────────────────────────────────────────────────────────────────
 
 app.listen(env.PORT, () => {
-  console.log(`🚀 Symphony server running on http://127.0.0.1:${env.PORT}`);
+  console.log(`🚀 Symphony server running on ${env.API_URL}`);
   startCleanupCron();
-  console.log(`   Auth:      http://127.0.0.1:${env.PORT}/api/auth/login`);
-  console.log(`   Status:    http://127.0.0.1:${env.PORT}/api/auth/status`);
-  console.log(`   Generate:  http://127.0.0.1:${env.PORT}/api/generate-playlist`);
-  console.log(`   Recommend: http://127.0.0.1:${env.PORT}/api/recommend`);
+  console.log(`   Auth:      ${env.API_URL}/api/auth/login`);
+  console.log(`   Status:    ${env.API_URL}/api/auth/status`);
+  console.log(`   Generate:  ${env.API_URL}/api/generate-playlist`);
+  console.log(`   Recommend: ${env.API_URL}/api/recommend`);
 });
