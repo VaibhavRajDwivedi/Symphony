@@ -46,7 +46,7 @@ async function parseIntent(userPrompt: string): Promise<ParsedIntent> {
   const prompt =
     `User prompt: '${userPrompt}'. ` +
     `Return ONLY valid JSON, no markdown: ` +
-    `{ mood, era, genre: [], tempo, language, themes: [], seedArtists: [], excludeGenres: [], playlistName, targetTrackCount: "number (integer representing how many songs the user explicitly asked for, or null if none specified)" }`;
+    `{ mood, era, genre: [], tempo, language, themes: [], seedArtists: [], excludeGenres: [], playlistName: "a short creative 2-4 word name capturing the vibe (NOT generic names like Symphony Generated Mix)", targetTrackCount: "number (integer representing how many songs the user explicitly asked for, or null if none specified)" }`;
 
   const intent = await callAI<ParsedIntent>(prompt, 0.2, systemPrompt);
   console.log(`[Stage 1] ✅ Parsed intent — playlistName: "${intent.playlistName}"`);
