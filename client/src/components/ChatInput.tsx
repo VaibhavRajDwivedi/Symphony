@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, ArrowRight, Image as ImageIcon, MessageSquare, ChevronDown } from "lucide-react";
 import { useSSEGenerate } from "../hooks/useSSEGenerate";
 import { useSSERecommend } from "../hooks/useSSERecommend";
@@ -34,6 +34,25 @@ export default function ChatInput() {
   const onDrop = (acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) setSelectedFile(acceptedFiles[0]);
   };
+
+  useEffect(() => {
+    if (mode !== "image") return;
+
+    const handlePaste = (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (const item of Array.from(items)) {
+        if (item.type.startsWith("image/")) {
+          const file = item.getAsFile();
+          if (file) setSelectedFile(file);
+          break;
+        }
+      }
+    };
+
+    window.addEventListener("paste", handlePaste);
+    return () => window.removeEventListener("paste", handlePaste);
+  }, [mode]);
 
   const { getRootProps, getInputProps, open } = useDropzone({
     onDrop,
