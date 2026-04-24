@@ -195,7 +195,7 @@ export default function Home() {
                           textAlign: "center",
                         }}
                       >
-                        This playlist will be automatically deleted in 24 hours
+                        This playlist will be automatically deleted in 24 hours from Server's account.
                       </p>
                     </div>
                   </div>
