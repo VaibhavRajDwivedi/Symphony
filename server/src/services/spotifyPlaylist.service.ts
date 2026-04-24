@@ -2,6 +2,7 @@ import axios from "axios";
 import { prisma } from "../lib/prisma.js";
 import { env } from "../config/env.js";
 import { getAccessToken } from "./spotifyAuth.service.js";
+import { getGroqText } from "./groq.service.js";
 import type {
   Track,
   ResolvedTrack,
@@ -188,6 +189,21 @@ async function addTracksToPlaylist(
 
 // ─── Main pipeline ────────────────────────────────────────────────────────────
 
+async function generatePlaylistName(tracks: Track[]): Promise<string> {
+  const trackList = tracks
+    .slice(0, 8)
+    .map((t) => `${t.title} by ${t.artist}`)
+    .join(", ");
+  try {
+    const name = await getGroqText(
+      `These songs are in a playlist: ${trackList}\n\nGive this playlist a short, creative, vibe-based name (2-4 words). No quotes, no explanation, just the name.`
+    );
+    return name || `Symphony Mix — ${new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
+  } catch {
+    return `Symphony Mix — ${new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
+  }
+}
+
 export async function generatePlaylist(
   tracks: Track[]
 ): Promise<GeneratePlaylistResponse> {
@@ -216,11 +232,7 @@ export async function generatePlaylist(
     );
   }
 
-  const playlistName = `Symphony Mix — ${new Date().toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  })}`;
+  const playlistName = await generatePlaylistName(tracks);
 
   console.log(`[Spotify] Creating playlist: "${playlistName}"`);
   const playlistId = await createPlaylist(accessToken, playlistName);
@@ -243,6 +255,7 @@ export async function generatePlaylist(
   return {
     playlistUrl,
     playlistId,
+    playlistName,
     tracks: resolved,
     notFound,
   };

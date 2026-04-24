@@ -4,7 +4,7 @@ import { expandWithLastFm } from "./lastfm.service.js";
 import { getAccessToken, getUserSpotifyToken } from "./spotifyAuth.service.js";
 import { extractPlaylistId, getPlaylistTracks } from "./spotifyPlaylist.service.js";
 import { getGeminiCompletion } from "./gemini.service.js";
-import { getGroqCompletion } from "./groq.service.js";
+import { getGroqCompletion, getGroqText } from "./groq.service.js";
 import type { GeminiSong, ScoredCandidate } from "./lastfm.service.js";
 import type { ResolvedTrack, SpotifySearchResponse, SpotifyPlaylistResponse } from "../types/index.js";
 import { playlistAgent, remixAgent } from "./playlistGraph.js";
@@ -380,19 +380,6 @@ export async function runRemixPipeline(
   validIds = validIds.slice(0, 100);
   const uris = validIds.map((id: string) => `spotify:track:${id}`);
 
-  const playlistName = `Remixed Mix — ${new Date().toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  })}`;
-  
-  // Re-fetches MASTER token to write the new playlist (user token was only needed for the read).
-  const masterToken = await getAccessToken();
-  const newPlaylistId = await createSpotifyPlaylist(masterToken, playlistName);
-
-  console.log(`[Remix] Adding ${uris.length} tracks to new playlist...`);
-  await addTracksToPlaylist(newPlaylistId, uris, masterToken);
-
   const resolvedTracks: ResolvedTrack[] = tracks
     .filter((t: any) => validIds.includes(t.id))
     .map((t: any) => ({
@@ -402,6 +389,21 @@ export async function runRemixPipeline(
       spotifyUrl: `https://open.spotify.com/track/${t.id}`,
       albumArt: undefined,
     }));
+
+  const trackList = resolvedTracks
+    .slice(0, 8)
+    .map((t) => `${t.title} by ${t.artist}`)
+    .join(", ");
+  const playlistName = await getGroqText(
+    `These songs are in a remixed playlist: ${trackList}\n\nGive this playlist a short, creative, vibe-based name (2-4 words). No quotes, no explanation, just the name.`
+  ) || `Remixed Mix — ${new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
+  
+  // Re-fetches MASTER token to write the new playlist (user token was only needed for the read).
+  const masterToken = await getAccessToken();
+  const newPlaylistId = await createSpotifyPlaylist(masterToken, playlistName);
+
+  console.log(`[Remix] Adding ${uris.length} tracks to new playlist...`);
+  await addTracksToPlaylist(newPlaylistId, uris, masterToken);
 
   return {
     playlistUrl: `https://open.spotify.com/playlist/${newPlaylistId}`,

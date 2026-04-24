@@ -36,7 +36,7 @@ export async function streamGeneratePlaylist(
           mode: "image",
           playlistUrl: result.playlistUrl,
           tracks: result.tracks as any,
-          title: "Image Playlist",
+          title: result.playlistName,
         },
       });
     }

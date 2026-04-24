@@ -22,6 +22,7 @@ export interface ApiResponse<T = unknown> {
 export interface GeneratePlaylistResponse {
   playlistUrl: string;
   playlistId: string;
+  playlistName: string;
   tracks: ResolvedTrack[];
   notFound: Track[];
 }

@@ -53,3 +53,19 @@ export async function getGroqCompletion<T>(
   }
 }
 
+export async function getGroqText(prompt: string): Promise<string> {
+  try {
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [
+        { role: "system", content: "You are a creative music curator. Respond with only the playlist name, nothing else. No quotes, no punctuation, no explanation." },
+        { role: "user", content: prompt },
+      ],
+      model: "llama-3.3-70b-versatile",
+      temperature: 0.8,
+    });
+    return chatCompletion.choices[0]?.message?.content?.trim() || "";
+  } catch (err: any) {
+    console.error("[Groq Text Error]:", err.message);
+    return "";
+  }
+}
