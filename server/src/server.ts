@@ -15,7 +15,7 @@ import streamRoutes from "./routes/stream.routes.js";
 
 const app = express();
 
-app.set("trust proxy", 1);
+// app.set("trust proxy", 1);
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 
