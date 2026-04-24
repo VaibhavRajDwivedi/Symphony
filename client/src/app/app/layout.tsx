@@ -13,7 +13,7 @@ export default function AppLayout({
         {children}
       </main>
       <Toaster
-        position="bottom-center"
+        position="top-center"
         toastOptions={{
           style: {
             background: "#111111",
