@@ -16,7 +16,7 @@ Symphony is a full-stack, production-grade music utility that removes the fricti
 
 ## Live Demo
 
-> `http://127.0.0.1:3000` (local) · `/app` for the generator · `/` for the landing page
+> [symphony-mgpw.vercel.app](https://symphony-mgpw.vercel.app/) · `/app` for the generator · `/` for the landing page
 
 ---
 
