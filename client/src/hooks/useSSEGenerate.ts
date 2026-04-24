@@ -2,6 +2,7 @@ import { useAppStore } from "../store/useAppStore";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 import { env } from "../config/env";
+import toast from "react-hot-toast";
 
 const API_URL = env.NEXT_PUBLIC_API_URL;
 
@@ -22,6 +23,13 @@ export function useSSEGenerate() {
     const mimeType = file.type as "image/jpeg" | "image/png" | "image/webp";
 
     setStatus("extracting");
+
+    const timeoutId = setTimeout(() => {
+      toast.error("Gemini API is facing higher usage. Please try again later.", {
+        duration: 6000,
+      });
+      reset();
+    }, 30000); // 30 seconds
 
     try {
       const response = await fetch(`${API_URL}/api/stream/generate`, {
@@ -67,6 +75,7 @@ export function useSSEGenerate() {
             }
 
             if (parsed.playlistUrl) {
+              clearTimeout(timeoutId);
               // Handles complete event
               setResult({
                 playlistUrl: parsed.playlistUrl,
@@ -88,6 +97,7 @@ export function useSSEGenerate() {
         }
       }
     } catch (err) {
+      clearTimeout(timeoutId);
       const message = err instanceof Error ? err.message : "Something went wrong.";
       setError(message);
     }
