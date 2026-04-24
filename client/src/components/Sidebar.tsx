@@ -48,7 +48,7 @@ export default function Sidebar() {
           {/* Header */}
           <div style={{ padding: "16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <button 
-              onClick={(e) => { e.preventDefault(); setActiveChat(null); window.location.href = "/"; }}
+              onClick={(e) => { e.preventDefault(); setActiveChat(null); window.location.href = "/app"; }}
               style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 12px", background: "var(--green)", color: "#000", border: "none", borderRadius: "8px", fontWeight: 600, fontSize: "14px", cursor: "pointer", flex: 1, justifyContent: "center" }}
             >
               <Plus size={16} /> New Chat

@@ -171,24 +171,50 @@ export default function HistoricalChatView() {
 
       {/* Embedded Spotify Player */}
       {playlistId && (
-        <div
-          style={{
-            borderRadius: "16px",
-            overflow: "hidden",
-            border: "1px solid var(--border)",
-            background: "var(--bg-card)",
-          }}
-        >
-          <iframe
-            title="Spotify Playlist"
-            src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`}
-            width="100%"
-            height="380"
-            frameBorder="0"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
-            style={{ display: "block", border: "none" }}
-          />
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          <div
+            style={{
+              borderRadius: "16px",
+              overflow: "hidden",
+              border: "1px solid var(--border)",
+              background: "var(--bg-card)",
+            }}
+          >
+            <iframe
+              title="Spotify Playlist"
+              src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`}
+              width="100%"
+              height="380"
+              frameBorder="0"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+              style={{ display: "block", border: "none" }}
+            />
+          </div>
+          <div
+            style={{
+              padding: "14px",
+              background: "rgba(234, 179, 8, 0.08)",
+              border: "1px solid rgba(234, 179, 8, 0.2)",
+              borderRadius: "10px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <p
+              style={{
+                margin: 0,
+                fontSize: "13px",
+                lineHeight: "1.5",
+                color: "#fbbf24",
+                fontWeight: 500,
+                textAlign: "center",
+              }}
+            >
+              This playlist will be automatically deleted in 24 hours from Server's account.
+            </p>
+          </div>
         </div>
       )}
 

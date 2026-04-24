@@ -62,7 +62,7 @@ export default function Home() {
           }}
         >
           {/* Historical Chat View */}
-          {activeChatId && !isGenerating && <HistoricalChatView />}
+          {activeChatId && <HistoricalChatView />}
 
           {/* Idle Hero Screen */}
           {!activeChatId && !isGenerating && (
