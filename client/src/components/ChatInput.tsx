@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, ArrowRight, Image as ImageIcon, MessageSquare, ChevronDown } from "lucide-react";
+import { Plus, ArrowRight, Image as ImageIcon, MessageSquare, ChevronDown, ChevronUp } from "lucide-react";
 import { useSSEGenerate } from "../hooks/useSSEGenerate";
 import { useSSERecommend } from "../hooks/useSSERecommend";
 import { useAppStore } from "../store/useAppStore";
@@ -116,11 +116,11 @@ export default function ChatInput() {
           <div style={{ position: "relative" }}>
             <button onClick={() => setShowModels(!showModels)} disabled={isProcessing} style={{ display: "flex", alignItems: "center", gap: "6px", background: "transparent", border: "1px solid var(--border)", padding: "4px 10px", borderRadius: "12px", color: "var(--text-secondary)", fontSize: "12px", cursor: isProcessing ? "not-allowed" : "pointer", fontWeight: 500 }}>
               {mode === "image" ? <><ImageIcon size={14} /> Screenshot to Playlist</> : mode === "remix" ? <><MessageSquare size={14} /> Remix Playlist</> : <><MessageSquare size={14} /> Prompt to Playlist</>}
-              <ChevronDown size={14} />
+              {showModels ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
             </button>
 
             {showModels && !isProcessing && (
-              <div style={{ position: "absolute", top: "calc(100% + 4px)", left: 0, background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "6px", display: "flex", flexDirection: "column", gap: "4px", minWidth: "180px", zIndex: 50, boxShadow: "0 10px 30px rgba(0,0,0,0.3)" }}>
+              <div style={{ position: "absolute", bottom: "calc(100% + 4px)", left: 0, background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "6px", display: "flex", flexDirection: "column", gap: "4px", minWidth: "180px", zIndex: 50, boxShadow: "0 -10px 30px rgba(0,0,0,0.3)" }}>
                 <button onClick={() => { setMode("image"); setShowModels(false); }} style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 10px", borderRadius: "8px", background: mode === "image" ? "rgba(255,255,255,0.1)" : "transparent", color: mode === "image" ? "var(--text-primary)" : "var(--text-secondary)", border: "none", cursor: "pointer", textAlign: "left", fontSize: "13px" }}>
                   <ImageIcon size={14} /> Screenshot to Playlist
                 </button>
