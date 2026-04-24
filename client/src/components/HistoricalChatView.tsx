@@ -2,6 +2,8 @@
 
 import { ExternalLink, MessageSquare, Image as ImageIcon, Clock } from "lucide-react";
 import { useChatStore } from "../store/useChatStore";
+import PlaylistActions from "./PlaylistActions";
+import MoodScoreCard from "./MoodScoreCard";
 
 function extractSpotifyPlaylistId(url: string): string | null {
   // Example format: https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M
@@ -188,6 +190,14 @@ export default function HistoricalChatView() {
             style={{ display: "block", border: "none" }}
           />
         </div>
+      )}
+
+      {/* Track Details & Mood Score (Fix 5) */}
+      {chat.playlistUrl && chat.tracks && chat.tracks.length > 0 && (
+        <>
+          <PlaylistActions playlistUrl={chat.playlistUrl} tracks={chat.tracks} />
+          <MoodScoreCard tracks={chat.tracks} />
+        </>
       )}
 
       {/* Fallback for missing playlist */}

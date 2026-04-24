@@ -6,9 +6,14 @@ import { env } from "../config/env.js";
 const router = Router();
 const JWT_SECRET = env.JWT_SECRET;
 
-// Inline middleware retrieving user from HttpOnly cookie
+// Helper to extract token from either cookie or Authorization header
+function extractToken(req: any): string | null {
+  return req.cookies?.token || req.headers.authorization?.split(" ")[1] || null;
+}
+
+// Inline middleware retrieving user from token
 router.use((req: any, res: any, next: any) => {
-  const token = req.cookies.token;
+  const token = extractToken(req);
   if (!token) {
     res.status(401).json({ message: "Unauthorized: No token provided" });
     return;
@@ -40,7 +45,7 @@ router.get("/", async (req: any, res: any) => {
 // POST / => Creates a new ChatSession entry
 router.post("/", async (req: any, res: any) => {
   try {
-    const { title, mode, promptText, playlistUrl } = req.body;
+    const { title, mode, promptText, playlistUrl, tracks } = req.body;
     const chat = await prisma.chatSession.create({
       data: {
         userId: req.userId,
@@ -48,10 +53,12 @@ router.post("/", async (req: any, res: any) => {
         mode: mode || "image",
         promptText: promptText || null,
         playlistUrl: playlistUrl || null,
+        tracks: tracks || null,
       },
     });
     res.status(201).json(chat);
   } catch (err) {
+    console.error("Create Chat Error:", err);
     res.status(500).json({ message: "Error creating chat session" });
   }
 });
@@ -83,4 +90,3 @@ router.delete("/:id", async (req: any, res: any) => {
 });
 
 export default router;
-

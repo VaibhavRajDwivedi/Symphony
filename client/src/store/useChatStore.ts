@@ -9,6 +9,7 @@ export interface ChatSession {
   mode: string;
   promptText: string | null;
   playlistUrl: string | null;
+  tracks: any[] | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -18,14 +19,12 @@ interface ChatState {
   activeChatId: string | null;
   isLoading: boolean;
   fetchChats: () => Promise<void>;
-  createChat: (data: { title?: string; mode: string; promptText?: string; playlistUrl?: string }) => Promise<void>;
+  createChat: (data: { title?: string; mode: string; promptText?: string; playlistUrl?: string; tracks?: any[] }) => Promise<void>;
   setActiveChat: (id: string | null) => void;
   deleteChat: (id: string) => Promise<void>;
 }
 
-
-// Configures axios to send cookies
-axios.defaults.withCredentials = true;
+const getToken = () => localStorage.getItem("auth_token");
 const API_BASE = `${env.NEXT_PUBLIC_API_URL}/api/chats`;
 
 export const useChatStore = create<ChatState>((set, get) => ({
@@ -36,7 +35,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
   fetchChats: async () => {
     set({ isLoading: true });
     try {
-      const response = await axios.get(API_BASE);
+      const token = getToken();
+      const response = await axios.get(API_BASE, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       set({ chats: response.data, isLoading: false });
     } catch (err) {
       console.error("Failed to fetch chats", err);
@@ -46,9 +48,11 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   createChat: async (data) => {
     try {
-      const response = await axios.post(API_BASE, data);
+      const token = getToken();
+      const response = await axios.post(API_BASE, data, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       const newChat = response.data;
-      // Prepends to array and sets as active
       set((state) => ({
         chats: [newChat, ...state.chats],
         activeChatId: newChat.id,
@@ -62,17 +66,17 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   deleteChat: async (id) => {
     try {
-      // Executes API call for permanent deletion
-      await axios.delete(`${API_BASE}/${id}`);
+      const token = getToken();
+      await axios.delete(`${API_BASE}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       
-      // Updates local state
       set((state) => ({
         chats: state.chats.filter((c) => c.id !== id),
         activeChatId: state.activeChatId === id ? null : state.activeChatId,
       }));
     } catch (err) {
       console.error("Failed to delete chat permanently", err);
-      // Note: User alerts can be added here, currently skipped to maintain clean UI
     }
   },
 }));

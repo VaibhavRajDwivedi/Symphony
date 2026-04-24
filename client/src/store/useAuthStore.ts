@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import { env } from "../config/env";
 
 export interface User {
   id: string;
@@ -20,11 +21,9 @@ interface AuthState {
   setSpotifyConnected: (token: string) => void;
 }
 
-// 1. Set global axios config
-axios.defaults.withCredentials = true;
+const API_BASE = `${env.NEXT_PUBLIC_API_URL}/api/auth/google`;
 
-// 2. Use the Hardcoded Render Base for production stability
-const API_BASE = "https://symphony-faql.onrender.com/api/auth/google";
+const getToken = () => localStorage.getItem("auth_token");
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
@@ -33,30 +32,36 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   fetchMe: async () => {
     set({ isLoading: true });
+    // Pick up token from URL after Google redirect
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlToken = urlParams.get("token");
+    if (urlToken) {
+      localStorage.setItem("auth_token", urlToken);
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+    const token = getToken();
+    if (!token) {
+      set({ user: null, isLoading: false, isInitialized: true });
+      return;
+    }
     try {
-      // 3. Explicitly request with credentials
-      const response = await axios.get(`${API_BASE}/me`, { withCredentials: true });
+      const response = await axios.get(`${API_BASE}/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       set({ user: response.data, isLoading: false, isInitialized: true });
-    } catch (err) {
-      console.error("Auth check failed:", err);
+    } catch {
+      localStorage.removeItem("auth_token");
       set({ user: null, isLoading: false, isInitialized: true });
     }
   },
 
   login: () => {
-    // 4. Trigger the redirect to the backend
     window.location.href = API_BASE;
   },
 
   logout: async () => {
-    set({ isLoading: true });
-    try {
-      await axios.post(`${API_BASE}/logout`, {}, { withCredentials: true });
-      set({ user: null, isLoading: false });
-    } catch (err) {
-      console.error("Logout failed", err);
-      set({ isLoading: false });
-    }
+    localStorage.removeItem("auth_token");
+    set({ user: null });
   },
 
   setSpotifyConnected: (token: string) => {

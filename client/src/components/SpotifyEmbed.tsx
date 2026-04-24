@@ -11,12 +11,26 @@ export default function SpotifyEmbed({
   playlistId: string;
 }) {
   const [isFirefox, setIsFirefox] = useState(false);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    setReady(false);
+    const timer = setTimeout(() => setReady(true), 3000); // 3s grace period
+    return () => clearTimeout(timer);
+  }, [playlistId]);
 
   useEffect(() => {
     setIsFirefox(navigator.userAgent.toLowerCase().includes("firefox"));
   }, []);
 
   if (!playlistId) return null;
+
+  if (!ready) return (
+    <div style={{ height: "352px", borderRadius: "14px", background: "#121212", 
+      display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <p style={{ color: "#a0a0a0", fontSize: "13px" }}>Loading playlist...</p>
+    </div>
+  );
 
   if (isFirefox) {
     return (

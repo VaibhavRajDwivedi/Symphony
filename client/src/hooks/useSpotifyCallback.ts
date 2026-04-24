@@ -50,11 +50,12 @@ export function useSpotifyCallback() {
       try {
         const token = await exchangeCodeForToken(code, verifier);
 
+        const authToken = localStorage.getItem("auth_token");
         // Persist the token to the user's DB profile
         await axios.post(
           `${API_BASE}/spotify/save`,
           { accessToken: token },
-          { withCredentials: true }
+          { headers: { Authorization: `Bearer ${authToken}` } }
         );
 
         // Update the in-memory store so ChatInput unlocks instantly

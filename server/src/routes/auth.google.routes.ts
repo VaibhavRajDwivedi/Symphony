@@ -9,6 +9,11 @@ const router = Router();
 
 const JWT_SECRET = env.JWT_SECRET;
 
+// Helper to extract token from either cookie or Authorization header
+function extractToken(req: any): string | null {
+  return req.cookies?.token || req.headers.authorization?.split(" ")[1] || null;
+}
+
 passport.use(
   new GoogleStrategy(
     {
@@ -59,20 +64,13 @@ router.get(
 
     const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "7d" });
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      sameSite: "none",
-    });
-
-    res.redirect(`${env.CLIENT_URL}`);
+    res.redirect(`${env.CLIENT_URL}/app?token=${token}`);
   }
 );
 
 // Route 3: Get current user
 router.get("/me", async (req, res) => {
-  const token = req.cookies.token;
+  const token = extractToken(req);
   if (!token) {
     res.status(401).json({ message: "Unauthorized" });
     return;
@@ -103,7 +101,7 @@ router.post("/logout", (req, res) => {
 
 // Route 4: Save user-level Spotify access token (obtained via PKCE on the frontend)
 router.post("/spotify/save", async (req, res) => {
-  const token = req.cookies.token;
+  const token = extractToken(req);
   if (!token) {
     res.status(401).json({ message: "Unauthorized" });
     return;
